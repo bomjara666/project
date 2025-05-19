@@ -1,4 +1,4 @@
-using UnityEngine;
+п»їusing UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
 public class Rocket : MonoBehaviour
@@ -24,11 +24,11 @@ public class Rocket : MonoBehaviour
             Destroy(gameObject);
         }
 
-        }
+    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Проверяем столкновение с игроком
+        // ГЏГ°Г®ГўГҐГ°ГїГҐГ¬ Г±ГІГ®Г«ГЄГ­Г®ГўГҐГ­ГЁГҐ Г± ГЁГЈГ°Г®ГЄГ®Г¬
         if (other.CompareTag("Player"))
         {
             Plane plane = other.GetComponent<Plane>();
@@ -36,7 +36,7 @@ public class Rocket : MonoBehaviour
             {
                 plane.UpdateLife(-damageToPlayer);
 
-                // Активируем ParticleSystem на самолете
+                // ГЂГЄГІГЁГўГЁГ°ГіГҐГ¬ ParticleSystem Г­Г  Г±Г Г¬Г®Г«ГҐГІГҐ
                 ParticleSystem planeParticles = plane.GetComponent<ParticleSystem>();
                 if (planeParticles != null)
                 {
@@ -44,45 +44,45 @@ public class Rocket : MonoBehaviour
                 }
             }
 
-            // Уничтожаем ракету
+            // Г“Г­ГЁГ·ГІГ®Г¦Г ГҐГ¬ Г°Г ГЄГҐГІГі
             Destroy(gameObject);
         }
-        // Проверяем столкновение с самолетом
+        // ГЏГ°Г®ГўГҐГ°ГїГҐГ¬ Г±ГІГ®Г«ГЄГ­Г®ГўГҐГ­ГЁГҐ Г± Г±Г Г¬Г®Г«ГҐГІГ®Г¬
         else if (other.TryGetComponent<Plane>(out var plane))
         {
             plane.UpdateLife(-1);
 
-            // Активируем ParticleSystem на самолете
+            // ГЂГЄГІГЁГўГЁГ°ГіГҐГ¬ ParticleSystem Г­Г  Г±Г Г¬Г®Г«ГҐГІГҐ
             ParticleSystem planeParticles = plane.GetComponent<ParticleSystem>();
             if (planeParticles != null)
             {
                 planeParticles.Play();
             }
 
-            // Уничтожаем ракету
+            // Г“Г­ГЁГ·ГІГ®Г¦Г ГҐГ¬ Г°Г ГЄГҐГІГі
             Destroy(gameObject);
         }
     }
 
-// Отдельный метод для воспроизведения эффекта
-private void PlayExplosionEffect()
-{
-    if (explosionEffect != null)
+    // ГЋГІГ¤ГҐГ«ГјГ­Г»Г© Г¬ГҐГІГ®Г¤ Г¤Г«Гї ГўГ®Г±ГЇГ°Г®ГЁГ§ГўГҐГ¤ГҐГ­ГЁГї ГЅГґГґГҐГЄГІГ 
+    private void PlayExplosionEffect()
     {
-        // Создаем эффект и настраиваем его
-        ParticleSystem explosion = Instantiate(explosionEffect, transform.position, Quaternion.identity);
-        
-        // Автоматическое уничтожение эффекта после завершения
-        Destroy(explosion.gameObject, explosion.main.duration);
-        
-        // Запускаем частицы
-        explosion.Play();
+        if (explosionEffect != null)
+        {
+            // Г‘Г®Г§Г¤Г ГҐГ¬ ГЅГґГґГҐГЄГІ ГЁ Г­Г Г±ГІГ°Г ГЁГўГ ГҐГ¬ ГҐГЈГ®
+            ParticleSystem explosion = Instantiate(explosionEffect, transform.position, Quaternion.identity);
+
+            // ГЂГўГІГ®Г¬Г ГІГЁГ·ГҐГ±ГЄГ®ГҐ ГіГ­ГЁГ·ГІГ®Г¦ГҐГ­ГЁГҐ ГЅГґГґГҐГЄГІГ  ГЇГ®Г±Г«ГҐ Г§Г ГўГҐГ°ГёГҐГ­ГЁГї
+            Destroy(explosion.gameObject, explosion.main.duration);
+
+            // Г‡Г ГЇГіГ±ГЄГ ГҐГ¬ Г·Г Г±ГІГЁГ¶Г»
+            explosion.Play();
+        }
+        else
+        {
+            Debug.LogWarning("Explosion effect not assigned!");
+        }
     }
-    else
-    {
-        Debug.LogWarning("Explosion effect not assigned!");
-    }
-}
 
     public void Explode()
     {
@@ -93,7 +93,7 @@ private void PlayExplosionEffect()
 
         Destroy(gameObject);
     }
-    
+
     public void TakeDamage(int dmg)
     {
         Explode();

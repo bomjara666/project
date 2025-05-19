@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Plane : MonoBehaviour
@@ -43,10 +44,11 @@ public class Plane : MonoBehaviour
         lifeStatus.text = lifeCounter.ToString();
         UpdateHeartIcons();
 
-        if (lifeCounter <= 0)
+        if (lifeCounter == 0)
         {
-            HandleDeath();
+            SceneManager.LoadScene("GameOverScene");
         }
+
     }
 
     // ���������� ����������� ��������
