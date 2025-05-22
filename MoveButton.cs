@@ -23,3 +23,5 @@ public class PlaneButtonController : MonoBehaviour, IPointerDownHandler, IPointe
         }
     }
 }
+
+// Ќет изменений, если нет пр€мых обращений к Plane.OnTriggerEnter2D или Rocket.OnTriggerEnter2D

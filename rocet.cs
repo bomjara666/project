@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
 public class Rocket : MonoBehaviour
@@ -7,12 +9,13 @@ public class Rocket : MonoBehaviour
     public float rotationSpeed = 120f;
     public int damageToPlayer = 1;
     public ParticleSystem explosionEffect;
+    private GameObject scoreManager;
 
     void Start()
     {
         GetComponent<Rigidbody2D>().gravityScale = 0;
         GetComponent<Rigidbody2D>().linearVelocity = -transform.right * speed;
-
+        scoreManager = GameObject.Find("ScoreManager");
         tag = "Rocket";
     }
 
@@ -21,61 +24,24 @@ public class Rocket : MonoBehaviour
         transform.Rotate(0, 0, rotationSpeed * Time.deltaTime);
         if (transform.position.x < -12f)
         {
+           
             Destroy(gameObject);
         }
 
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        // Ïðîâåðÿåì ñòîëêíîâåíèå ñ èãðîêîì
-        if (other.CompareTag("Player"))
-        {
-            Plane plane = other.GetComponent<Plane>();
-            if (plane != null)
-            {
-                plane.UpdateLife(-damageToPlayer);
 
-                // Àêòèâèðóåì ParticleSystem íà ñàìîëåòå
-                ParticleSystem planeParticles = plane.GetComponent<ParticleSystem>();
-                if (planeParticles != null)
-                {
-                    planeParticles.Play();
-                }
-            }
-
-            // Óíè÷òîæàåì ðàêåòó
-            Destroy(gameObject);
-        }
-        // Ïðîâåðÿåì ñòîëêíîâåíèå ñ ñàìîëåòîì
-        else if (other.TryGetComponent<Plane>(out var plane))
-        {
-            plane.UpdateLife(-1);
-
-            // Àêòèâèðóåì ParticleSystem íà ñàìîëåòå
-            ParticleSystem planeParticles = plane.GetComponent<ParticleSystem>();
-            if (planeParticles != null)
-            {
-                planeParticles.Play();
-            }
-
-            // Óíè÷òîæàåì ðàêåòó
-            Destroy(gameObject);
-        }
-    }
-
-    // Îòäåëüíûé ìåòîä äëÿ âîñïðîèçâåäåíèÿ ýôôåêòà
     private void PlayExplosionEffect()
     {
         if (explosionEffect != null)
         {
-            // Ñîçäàåì ýôôåêò è íàñòðàèâàåì åãî
+           
             ParticleSystem explosion = Instantiate(explosionEffect, transform.position, Quaternion.identity);
 
-            // Àâòîìàòè÷åñêîå óíè÷òîæåíèå ýôôåêòà ïîñëå çàâåðøåíèÿ
+           
             Destroy(explosion.gameObject, explosion.main.duration);
 
-            // Çàïóñêàåì ÷àñòèöû
+           
             explosion.Play();
         }
         else
@@ -97,5 +63,25 @@ public class Rocket : MonoBehaviour
     public void TakeDamage(int dmg)
     {
         Explode();
+    }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        Plane plane = other.GetComponent<Plane>();
+        if (plane != null)
+        {
+            // Всегда наносим отрицательный урон (вычитаем жизни)
+            int damage = damageToPlayer;
+            plane.UpdateLife(-damage);
+
+            // Воспроизводим эффект (если нужно)
+            ParticleSystem planeParticles = plane.GetComponent<ParticleSystem>();
+            if (planeParticles != null)
+            {
+                planeParticles.Play();
+            }
+
+            // Уничтожаем ракету
+            Destroy(gameObject);
+        }
     }
 }

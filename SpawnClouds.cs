@@ -1,4 +1,10 @@
 using UnityEngine;
+// ...existing code...
+// Нет изменений, если нет прямых обращений к Plane.OnTriggerEnter2D или Rocket.OnTriggerEnter2D
+// ...existing code...
+
+// Убедитесь, что здесь нет Instantiate самолёта!
+// Этот скрипт должен спавнить только облака и ракеты.
 
 public class SpawnClouds : MonoBehaviour
 {
@@ -17,6 +23,7 @@ public class SpawnClouds : MonoBehaviour
     {
         Invoke("SpawnCloud", spawnInterval);
         Invoke("SpawnRocet", spawnRocetInterval);
+        // Не спавнить самолёт здесь!
     }
 
     private void SpawnCloud()

@@ -1,4 +1,5 @@
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -86,6 +87,15 @@ public class Plane : MonoBehaviour
     {
         moveDirection = isPressed ? 1 : 0; // ������������� ����������� ��������
     }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        // Удаляем обработку урона здесь, чтобы урон применялся только в Rocket
+        // if (collision.CompareTag("Rocket"))
+        // {
+        //     UpdateLife(collision.gameObject.GetComponent<Rocket>().damageToPlayer);
+        //     gameObject.GetComponent<ParticleSystem>().Play();
+        // }
+    }
 
     public void Fire()
     {
@@ -108,20 +118,3 @@ public class Plane : MonoBehaviour
     }
 }
 
-public class FireButton : MonoBehaviour, IPointerDownHandler
-{
-    [SerializeField]
-    private Plane plane; // ����������: ��������� ���� plane
-
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        if (plane != null)
-        {
-            plane.Fire();
-        }
-        else
-        {
-            Debug.LogError("Plane reference is not set in FireButton!");
-        }
-    }
-}
